@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 
 export const Addpost = async (req, res) => {
   const { description, category } = req.body;
-  console.log(req.file);
+  // console.log(req.file);
   try {
     if (!description) {
       return res.status(400).json({ error: "Please fill all the fields!" });

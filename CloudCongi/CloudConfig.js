@@ -6,13 +6,13 @@ cloudinary.config({
   api_key:"144852565252598",
   api_secret:"yIcqB0oJitbQW-yG_uV6o2SXtlM" ,
 });
-// console.log("i reached here c cofig");
+
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {
-//     cb(null, 'uploads/'); // Directory to store files
+//     cb(null, 'uploads/'); 
 //   },
 //   filename: (req, file, cb) => {
-//     cb(null, Date.now() + '-' + file.originalname); // Unique filename
+//     cb(null, Date.now() + '-' + file.originalname); 
 //   },
 // });
 const storage=new CloudinaryStorage({
@@ -26,6 +26,5 @@ const storage=new CloudinaryStorage({
     return  file.originalname+"-"+Date.now(); // Custom filename
   }
 });
-// Multer upload configuration
 export const upload = multer({ storage: storage });
-export default { cloudinary };
+// export default { cloudinary };
