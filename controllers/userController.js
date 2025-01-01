@@ -27,10 +27,10 @@ export const GetPost = async (req, res) => {
   const category = req.query.category;
   console.log(category);
   try {
-    if (category == "" || category == undefined) {
+    if (!category) {
       return res.status(400).json({ error: "category is not given!" });
     }
-    const SelectedPost = await User.find({ category: category });
+    const SelectedPost = await User.find({ category: category }).sort({ createdAt: -1 });;
     if (SelectedPost.length == 0) {
       return res.status(400).json({ error: "No data found!" });
     }
@@ -43,13 +43,13 @@ export const GetPost = async (req, res) => {
 };
 // for GetPost data
 export const GetSpecificPost = async (req, res) => {
-  const Posted = req.params.postid; 
-  console.log(Posted);
+  const Postid = req.params.postid; 
+  // console.log(Postid);
   try {
-    if (!Posted) {
+    if (!Postid) {
       return res.status(400).json({ error: "Post ID is not provided!" });
     }
-    const SpecificPost = await User.findById(Posted); 
+    const SpecificPost = await User.findById(Postid); 
     if (!SpecificPost) {
       return res.status(404).json({ error: "No specific post found!" });
     }
@@ -67,7 +67,7 @@ export const GetSpecificPost = async (req, res) => {
 export const AllRandomPost = async (req, res) => {
   try {
     
-    const AllRandomPost = await User.find(); 
+    const AllRandomPost = await User.find().sort({ createdAt: -1 });; 
     if (!AllRandomPost) {
       return res.status(404).json({ error: "No specific post found!" });
     }
