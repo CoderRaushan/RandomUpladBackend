@@ -1,5 +1,18 @@
 import User from "../models/userModel.js";
-
+import redis from "redis"
+const redisClient = redis.createClient({
+  url: "redis://redis-16422.c10.us-east-1-4.ec2.redns.redis-cloud.com:16422",
+  password:"WzGQfUjCYvGIu0v07RNBrSmDNa8VGmXf"
+});
+redisClient.connect().then(async() => {
+  console.log("Redis connected successfully!");
+  const randomuploadData = await User.find({}).sort({ createdAt: -1 });
+  await redisClient.set('randomuploadData', JSON.stringify(randomuploadData)); 
+  // const data=await redisClient.get('randomuploadData')
+  // console.log(JSON.parse(data));
+}).catch(err => {
+  console.error('Error connecting to Redis:', err);
+});
 //for Register Logout
 
 export const Addpost = async (req, res) => {
@@ -66,13 +79,20 @@ export const GetSpecificPost = async (req, res) => {
 // for GetPost all data
 export const AllRandomPost = async (req, res) => {
   try {
-    
-    const AllRandomPost = await User.find().sort({ createdAt: -1 });; 
+    const cachedData = await redisClient.get('randomuploadData');
+    if (cachedData) {
+      console.log("redis me data mil gya!");
+      return res
+      .status(200) 
+      .json({ message: "post fetched successfully!",SelectedPost:JSON.parse(cachedData)});
+    }
+    const AllRandomPost = await User.find().sort({ createdAt: -1 });
     if (!AllRandomPost) {
       return res.status(404).json({ error: "No specific post found!" });
     }
+    await redisClient.set('randomuploadData', JSON.stringify(AllRandomPost)); 
     return res
-      .status(200) // Use 200 for successful GET requests
+      .status(200)
       .json({ message: "post fetched successfully!",SelectedPost:AllRandomPost });
   } catch (err) {
     console.error(err);
