@@ -1,8 +1,10 @@
 import User from "../models/userModel.js";
+import dotenv from "dotenv";
+dotenv.config();
 import redis from "redis"
 const redisClient = redis.createClient({
-  url: "redis://redis-16422.c10.us-east-1-4.ec2.redns.redis-cloud.com:16422",
-  password:"WzGQfUjCYvGIu0v07RNBrSmDNa8VGmXf"
+  url:process.env.Redis_uri,
+  password:process.env.Redis_password
 });
 redisClient.connect().then(async() => {
   console.log("Redis connected successfully!");

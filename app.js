@@ -9,7 +9,7 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser()); // Make sure to add this line
 const corsOptions = {
-  origin: ["https://randomupload.netlify.app"], 
+  origin: ["https://randomupload.netlify.app","http://127.0.0.1:5500"], 
   credentials: true, 
 };
 app.use(cors(corsOptions));
